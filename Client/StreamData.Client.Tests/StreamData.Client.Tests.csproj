@@ -84,6 +84,7 @@
     <Compile Include="Data\Order.cs" />
     <Compile Include="Data\StockMarketOrders.cs" />
     <Compile Include="Data\TestData.cs" />
+    <Compile Include="EnsureJsonPatchWorksWithTheModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

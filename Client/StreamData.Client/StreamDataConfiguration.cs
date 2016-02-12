@@ -6,9 +6,15 @@
     public class StreamDataConfiguration
     {
         public string ApiUrl { get; set; }
+        public string SecretKey { get; set; }
+
+        private ServerSentEventEngine engine;
+
         private string streamDataHost;
+
         private StreamDataConfigurationMode mode = StreamDataConfigurationMode.PRODUCTION;
         public StreamDataConfigurationMode Mode => mode;
+        public ServerSentEventEngine Engine => engine;
         public static StreamDataConfiguration Default
             => new StreamDataConfiguration()
             {
@@ -32,7 +38,11 @@
             mode = StreamDataConfigurationMode.PRODUCTION;
             streamDataHost = StreamDataOfficialUrls.PRODUCTION;
         }
+
+        public void UseServerSentEventEngine<T>(T engine) where T : ServerSentEventEngine
+        {
+            this.engine = engine;
+        }
         
-        public string SecretKey { get; set; }
     }
 }

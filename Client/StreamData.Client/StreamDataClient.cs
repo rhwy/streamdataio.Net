@@ -34,7 +34,19 @@
         }
 
 
-        
-        
+        public void OnData<T>(Action<T> action)
+        {
+            Configuration.Engine.OnNewJsonData(json =>
+            {
+                T value = JsonConvert.DeserializeObject<T>(json);
+                action(value);
+            });
+        }
+
+        public void Start(string apiUrl)
+        {
+
+        }
+
     }
 }

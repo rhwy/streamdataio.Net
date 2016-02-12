@@ -81,6 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientCreationAndConfiguration.cs" />
     <Compile Include="Data\Order.cs" />
     <Compile Include="Data\StockMarketOrders.cs" />
     <Compile Include="Data\TestData.cs" />

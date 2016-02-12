@@ -59,6 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamDataClient.cs" />
+    <Compile Include="StreamDataConfiguration.cs" />
+    <Compile Include="StreamDataConfigurationMode.cs" />
+    <Compile Include="StreamDataOfficialUrls.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

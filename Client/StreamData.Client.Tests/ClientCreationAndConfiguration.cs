@@ -29,6 +29,44 @@
             });
             Check.That(client.Configuration.ApiUrl).IsEqualTo("http://fakeurl");
         }
-        
+
+
+        [Fact]
+        public void
+        WHEN_I_want_to_create_new_default_instance_THEN_it_should_be_configured_in_production()
+        {
+            ConfigurationManager.AppSettings["streamdata:secretkey"] = "abc";
+            var client = StreamDataClient.WithDefaultConfiguration();
+            Check.That(client.Configuration.Mode).IsEqualTo(StreamDataConfigurationMode.PRODUCTION);
+        }
+
+
+
+        [Fact]
+        public void
+        WHEN_I_create_new_instance_in_production_mode_THEN_ensure_secretkey_is_configured()
+        {
+            Check.ThatCode(() =>
+            {
+                var client = StreamDataClient.WithConfiguration(conf =>
+                {
+                    conf.UseProduction();
+                });
+            }).Throws<StreamDataConfigurationException>()
+                .WithMessage("[SecretKey] not configured");
+        }
+
+        [Fact]
+        public void
+        WHEN_I_create_new_instance_in_sandbox_mode_THEN_ensure_secretkey_is_not_needed()
+        {
+            Check.ThatCode(() =>
+            {
+                var client = StreamDataClient.WithConfiguration(conf =>
+                {
+                    conf.UseSandbox();
+                });
+            }).DoesNotThrow();
+        }
     }
 }

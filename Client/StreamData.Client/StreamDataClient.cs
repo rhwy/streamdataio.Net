@@ -11,18 +11,30 @@
     public class StreamDataClient
     {
         public StreamDataConfiguration Configuration { get; }
-        public static StreamDataClient WithConfiguration(Action<StreamDataConfiguration> configure)
-        {
-            var configuration = StreamDataConfiguration.Default;
-            configure(configuration);
-            return new StreamDataClient(configuration);
-        }
-        public static StreamDataClient WithDefaultConfiguration() => WithConfiguration(c => { });
-
         private StreamDataClient(StreamDataConfiguration config)
         {
             Configuration = config;
         }
+        public static StreamDataClient WithDefaultConfiguration() => WithConfiguration(c => { });
+
+        public static StreamDataClient WithConfiguration(Action<StreamDataConfiguration> configure)
+        {
+            var configuration = StreamDataConfiguration.Default;
+            configure(configuration);
+            EnsureSecretKeyPresentInProductionMode(configuration);
+            return new StreamDataClient(configuration);
+        }
+
+        private static void EnsureSecretKeyPresentInProductionMode(StreamDataConfiguration configuration)
+        {
+            if (configuration.Mode == StreamDataConfigurationMode.PRODUCTION
+                 && string.IsNullOrEmpty(configuration.SecretKey))
+                throw new StreamDataConfigurationException("[SecretKey] not configured");
+
+        }
+
+
+        
         
     }
 }

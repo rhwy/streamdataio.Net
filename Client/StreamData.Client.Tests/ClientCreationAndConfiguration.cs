@@ -72,5 +72,17 @@ namespace StreamData.Client.Tests
                 });
             }).DoesNotThrow();
         }
+
+        [Fact]
+        public void
+        WHEN_I_create_new_instance_THEN_ensure_default_engine_is_defined()
+        {
+            ConfigurationManager.AppSettings["streamdata:secretkey"] = "abc";
+            var client = StreamDataClient<FakeObject>.WithDefaultConfiguration();
+            var type = client.Configuration.EngineType.Item1;
+            Check.That(type).IsEqualTo(typeof (EventSourceServerSentEngine));
+        }
+
+
     }
 }

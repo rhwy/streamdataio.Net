@@ -16,24 +16,30 @@ namespace StreamData.Client
         public StreamDataConfiguration Configuration { get; }
         T state = default(T);
         public T State => state;
+        private ServerSentEventEngine engine;
 
         private StreamDataClient(StreamDataConfiguration config)
         {
             Configuration = config;
+            engine = Activator.CreateInstance(
+                Configuration.EngineType.Item1,
+                Configuration.EngineType.Item2) as ServerSentEventEngine;
+
             if (Configuration.KeepState)
             {
-                Configuration.Engine.OnNewJsonData += (data) =>
+                engine.OnNewJsonData += (data) =>
                 {
                     T value = JsonConvert.DeserializeObject<T>(data);
                     state = value;
                 };
-                Configuration.Engine.OnNewJsonPatch += (patch) =>
+                engine.OnNewJsonPatch += (patch) =>
                 {
                     var operations = JsonConvert.DeserializeObject<List<Operation<T>>>(patch);
                     var patchDocumentOperations = new JsonPatchDocument<T>(operations);
                     patchDocumentOperations.ApplyTo(state);
                 };
             }
+
         }
         public static StreamDataClient<T> WithDefaultConfiguration() 
             => WithConfiguration(c => { });
@@ -51,13 +57,12 @@ namespace StreamData.Client
             if (configurationToVerify.Mode == StreamDataConfigurationMode.PRODUCTION
                  && string.IsNullOrEmpty(configurationToVerify.SecretKey))
                 throw new StreamDataConfigurationException("[SecretKey] not configured");
-
         }
 
 
         public void OnData<T>(Action<T> action)
         {
-            Configuration.Engine.OnNewJsonData += (data) =>
+            engine.OnNewJsonData += (data) =>
             {
                 T value = JsonConvert.DeserializeObject<T>(data);
                 action(value);
@@ -66,7 +71,7 @@ namespace StreamData.Client
 
         public void OnPatch<T>(Action<JsonPatchDocument<T>> actionWithPatch) where T:class
         {
-            Configuration.Engine.OnNewJsonPatch += (patch) =>
+            engine.OnNewJsonPatch += (patch) =>
             {
                 var operations = JsonConvert.DeserializeObject<List<Operation<T>>>(patch);
                 var patchDocumentOperations = new JsonPatchDocument<T>(operations);
@@ -78,7 +83,7 @@ namespace StreamData.Client
         
         public void Start(string apiUrl)
         {
-            if (!Configuration.Engine.Start())
+            if (!engine.Start(apiUrl))
             {
                 throw new StreamDataConfigurationException("ServerSentEvents engine can not be started");
             }

@@ -1,4 +1,6 @@
-﻿namespace StreamData.Client
+﻿using System;
+
+namespace StreamData.Client
 {
     using System.Configuration;
 
@@ -8,14 +10,16 @@
         public string ApiUrl { get; set; }
         public string SecretKey { get; set; }
 
-        private ServerSentEventEngine engine;
+        private Tuple<Type,object[]> engineType = Tuple.Create<Type, object[]>(typeof(EventSourceServerSentEngine),null);
+        
         private bool keepState = false;
         public bool KeepState => keepState;
         private string streamDataHost;
 
         private StreamDataConfigurationMode mode = StreamDataConfigurationMode.PRODUCTION;
         public StreamDataConfigurationMode Mode => mode;
-        public ServerSentEventEngine Engine => engine;
+        public Tuple<Type, object[]> EngineType => engineType;
+
         public static StreamDataConfiguration Default
             => new StreamDataConfiguration()
             {
@@ -40,11 +44,10 @@
             streamDataHost = StreamDataOfficialUrls.PRODUCTION;
         }
 
-        public void UseServerSentEventEngine<T>(T engine) where T : ServerSentEventEngine
+        public void UserServerSentEventEngine<T>(params object[] constructorArgs) where T:ServerSentEventEngine
         {
-            this.engine = engine;
+            this.engineType = Tuple.Create(typeof (T),constructorArgs);
         }
-
         public void KeepStateUpdated()
         {
             keepState = true;

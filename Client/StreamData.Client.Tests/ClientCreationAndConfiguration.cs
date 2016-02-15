@@ -46,6 +46,7 @@
         public void
         WHEN_I_create_new_instance_in_production_mode_THEN_ensure_secretkey_is_configured()
         {
+            ConfigurationManager.AppSettings["streamdata:secretkey"] = null;
             Check.ThatCode(() =>
             {
                 var client = StreamDataClient.WithConfiguration(conf =>

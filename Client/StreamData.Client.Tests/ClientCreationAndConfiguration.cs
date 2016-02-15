@@ -83,6 +83,19 @@ namespace StreamData.Client.Tests
             Check.That(type).IsEqualTo(typeof (EventSourceServerSentEngine));
         }
 
+        [Fact]
+        public void
+        WHEN_configuration_is_used_THEN_ensure_it_can_build_the_right_url()
+        {
+            ConfigurationManager.AppSettings["streamdata:secretkey"] = "abc";
+            var client = StreamDataClient<FakeObject>.WithConfiguration(
+                conf=>conf.UserServerSentEventEngine<FakeEngine>());
+            string url = client.Configuration.BuildUrl("fakeurl");
+            string expected = $"{StreamDataOfficialUrls.PRODUCTION}/fakeurl?X-Sd-Token=abc";
+            client.Start("fakeurl");
+            Check.That(client.ListenUrl).IsEqualTo(expected);
+        }
+
 
     }
 }

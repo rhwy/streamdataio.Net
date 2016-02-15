@@ -11,7 +11,7 @@ namespace StreamData.Client.Tests.Data
             return FakeEngineWrapper.Instance.Start(apiUrl);
         }
 
-        public string ApiUrl => FakeEngineWrapper.Instance.ApiUrl;
+        public string Url => FakeEngineWrapper.Instance.Url;
         public FakeEngine()
         {
             FakeEngineWrapper.Instance.OnNewJsonData += s => OnNewJsonData?.Invoke(s);

@@ -31,12 +31,12 @@ namespace StreamData.Client.Tests.Data
             OnNewJsonPatch += (_) => { };
         }
 
-        private string apiUrl;
-        public string ApiUrl => apiUrl;
-        public bool Start(string apiUrl)
+        private string url;
+        public string Url => url;
+        public bool Start(string url)
         {
             isStarted = true;
-            this.apiUrl = apiUrl;
+            this.url = url;
             return true;
         }
 

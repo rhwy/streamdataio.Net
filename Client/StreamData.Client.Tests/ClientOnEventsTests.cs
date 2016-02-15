@@ -38,7 +38,7 @@ namespace StreamData.Client.Tests
 
             client.Start("fakeurl");
 
-            Check.That(FakeEngineWrapper.Instance.ApiUrl).IsEqualTo("fakeurl");
+            Check.That(client.Configuration.ApiUrl).IsEqualTo("fakeurl");
         }
         [Fact]
         public void
@@ -55,7 +55,7 @@ namespace StreamData.Client.Tests
             expectedMarketOrders.Add(new Order() { Price = 10, Title = "test1" });
             expectedMarketOrders.Add(new Order() { Price = 20, Title = "test2" });
 
-            client.OnData<StockMarketOrders>(data => testData = data);
+            client.OnData(data => testData = data);
 
             client.Start("fakeurl");
 
@@ -80,8 +80,8 @@ namespace StreamData.Client.Tests
             expectedMarketOrders.Add(new Order() { Price = 10, Title = "test1" });
             expectedMarketOrders.Add(new Order() { Price = 20, Title = "test2" });
 
-            client.OnData<StockMarketOrders>(data => testData = data);
-            client.OnPatch<StockMarketOrders>(patch => patch.ApplyTo(testData));
+            client.OnData(data => testData = data);
+            client.OnPatch(patch => patch.ApplyTo(testData));
             client.Start("fakeurl");
 
             FakeEngineWrapper.Instance.SendData(expectedMarketOrders);

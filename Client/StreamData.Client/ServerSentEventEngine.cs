@@ -1,4 +1,10 @@
-﻿namespace StreamData.Client
+﻿using System.Collections.Generic;
+using System.Threading;
+using EventSource4Net;
+using Marvin.JsonPatch;
+using Newtonsoft.Json;
+
+namespace StreamData.Client
 {
     using System;
 
@@ -6,21 +12,42 @@
     {
         event Action<string> OnNewJsonData;
         event Action<string> OnNewJsonPatch;
-        //Action<Action<string>> OnNewJsonData { get; }
-        //Action<Action<string>> OnNewJsonPatch { get; }
         bool Start(string url);
-        string ApiUrl { get; }
+        string Url { get; }
     }
 
     public class EventSourceServerSentEngine : ServerSentEventEngine
     {
-        public event Action<string> OnNewJsonData;
-        public event Action<string> OnNewJsonPatch;
+        public event Action<string> OnNewJsonData = (_)=> {};
+        public event Action<string> OnNewJsonPatch = (_) => {};
+        private CancellationTokenSource cancellationTokenSource;
+        private EventSource es;
         public bool Start(string url)
         {
-            throw new NotImplementedException();
+            cancellationTokenSource = new CancellationTokenSource();
+            listenUrl = url;
+            es = new EventSource(new Uri(listenUrl), 1000);
+
+            es.EventReceived += new EventHandler<ServerSentEventReceivedEventArgs>((o, e) =>
+            {
+                if (e.Message.EventType == "data")
+                {
+                    OnNewJsonData(e.Message.Data);
+                }
+                else if (e.Message.EventType == "patch")
+                {
+                    OnNewJsonPatch(e.Message.Data);
+                }
+                else
+                {
+                    Console.WriteLine(e.Message.ToString());
+                }
+            });
+            es.Start(cancellationTokenSource.Token);
+            return true;
         }
 
-        public string ApiUrl { get; }
+        private string listenUrl;
+        public string Url => listenUrl;
     }
 }

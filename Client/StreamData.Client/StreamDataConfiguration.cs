@@ -15,7 +15,7 @@ namespace StreamData.Client
         private bool keepState = false;
         public bool KeepState => keepState;
         private string streamDataHost;
-
+        public string StreamDataHost => streamDataHost;
         private StreamDataConfigurationMode mode = StreamDataConfigurationMode.PRODUCTION;
         public StreamDataConfigurationMode Mode => mode;
         public Tuple<Type, object[]> EngineType => engineType;
@@ -51,6 +51,11 @@ namespace StreamData.Client
         public void KeepStateUpdated()
         {
             keepState = true;
+        }
+
+        public string BuildUrl(string url)
+        {
+            return $"{streamDataHost}/{url}?X-Sd-Token={SecretKey}";
         }
     }
 }

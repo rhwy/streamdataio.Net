@@ -17,7 +17,7 @@ namespace StreamData.Client
         T state = default(T);
         public T State => state;
         private ServerSentEventEngine engine;
-
+        public string ListenUrl => engine.Url;
         private StreamDataClient(StreamDataConfiguration config)
         {
             Configuration = config;
@@ -60,7 +60,7 @@ namespace StreamData.Client
         }
 
 
-        public void OnData<T>(Action<T> action)
+        public void OnData(Action<T> action)
         {
             engine.OnNewJsonData += (data) =>
             {
@@ -69,7 +69,7 @@ namespace StreamData.Client
             };
         }
 
-        public void OnPatch<T>(Action<JsonPatchDocument<T>> actionWithPatch) where T:class
+        public void OnPatch(Action<JsonPatchDocument<T>> actionWithPatch) 
         {
             engine.OnNewJsonPatch += (patch) =>
             {
@@ -81,9 +81,11 @@ namespace StreamData.Client
         }
 
         
-        public void Start(string apiUrl)
+        public void Start(string apiUrl=null)
         {
-            if (!engine.Start(apiUrl))
+            Configuration.ApiUrl = apiUrl ?? Configuration.ApiUrl;
+            var url = Configuration.BuildUrl(Configuration.ApiUrl);
+            if (!engine.Start(url))
             {
                 throw new StreamDataConfigurationException("ServerSentEvents engine can not be started");
             }

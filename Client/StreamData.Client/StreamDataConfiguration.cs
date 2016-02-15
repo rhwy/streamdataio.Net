@@ -9,7 +9,8 @@
         public string SecretKey { get; set; }
 
         private ServerSentEventEngine engine;
-
+        private bool keepState = false;
+        public bool KeepState => keepState;
         private string streamDataHost;
 
         private StreamDataConfigurationMode mode = StreamDataConfigurationMode.PRODUCTION;
@@ -43,6 +44,10 @@
         {
             this.engine = engine;
         }
-        
+
+        public void KeepStateUpdated()
+        {
+            keepState = true;
+        }
     }
 }

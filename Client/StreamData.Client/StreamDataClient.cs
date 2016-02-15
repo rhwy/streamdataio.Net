@@ -1,4 +1,5 @@
 ﻿using Marvin.JsonPatch;
+using Marvin.JsonPatch.Operations;
 
 namespace StreamData.Client
 {
@@ -35,14 +36,18 @@ namespace StreamData.Client
 
         }
 
-        
 
+        object state = null;
         public void OnData<T>(Action<T> action)
         {
             Configuration.Engine?.OnNewJsonData?.Invoke(json =>
             {
                 T value = JsonConvert.DeserializeObject<T>(json);
                 action(value);
+                if (Configuration.KeepState)
+                {
+                    state = value;
+                }
             });
         }
 
@@ -50,13 +55,22 @@ namespace StreamData.Client
         {
             Configuration.Engine?.OnNewJsonPatch?.Invoke(json =>
             {
-                
+                var operations = JsonConvert.DeserializeObject<List<Operation<T>>>(json);
+                var patchDocumentOperations = new JsonPatchDocument<T>(operations);
+
+                actionWithPatch(patchDocumentOperations);
+
+                if (Configuration.KeepState)
+                {
+                    patchDocumentOperations.ApplyTo((T)state);
+                }
             });
+            
         }
 
         public T State<T>()
         {
-            return default(T);
+            return (T)state;
         }
 
         public void Start(string apiUrl)

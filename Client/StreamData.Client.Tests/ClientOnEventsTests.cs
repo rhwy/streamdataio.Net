@@ -157,5 +157,34 @@ namespace StreamData.Client.Tests
             Check.That(actualState).IsEqualTo(default(StockMarketOrders));
         }
 
+
+        [Fact]
+        public void
+        WHEN_client_has_data_and_patch_THEN_state_is_updated()
+        {
+            FakeEngine fakeEngine = new FakeEngine();
+            var client = StreamDataClient.WithConfiguration(conf =>
+            {
+                conf.UseSandbox();
+                conf.UseServerSentEventEngine(fakeEngine);
+                conf.KeepStateUpdated();
+            });
+            StockMarketOrders expectedMarketOrders = new StockMarketOrders();
+            expectedMarketOrders.Add(new Order() { Price = 10, Title = "test1" });
+            expectedMarketOrders.Add(new Order() { Price = 20, Title = "test2" });
+
+            client.Start("fakeurl");
+            client.OnData<StockMarketOrders>(x=> {});
+            client.OnPatch<StockMarketOrders>(x => { });
+            fakeEngine.SendData(expectedMarketOrders);
+            var patch = new JsonPatchDocument<StockMarketOrders>(new List<Operation<StockMarketOrders>>
+            {
+                new Operation<StockMarketOrders>("replace","0/price","0/price",20)
+            });
+            fakeEngine.SendPatch(patch);
+            StockMarketOrders actualState = client.State<StockMarketOrders>();
+            Check.That(actualState).IsNotNull();
+            Check.That(actualState.GetTotal()).IsEqualTo(40);
+        }
     }
 }

@@ -11,21 +11,39 @@ namespace StreamData.Client
     using Newtonsoft.Json;
 
 
-    public class StreamDataClient
+    public class StreamDataClient<T> where T : class
     {
         public StreamDataConfiguration Configuration { get; }
+        T state = default(T);
+        public T State => state;
+
         private StreamDataClient(StreamDataConfiguration config)
         {
             Configuration = config;
+            if (Configuration.KeepState)
+            {
+                Configuration.Engine.OnNewJsonData += (data) =>
+                {
+                    T value = JsonConvert.DeserializeObject<T>(data);
+                    state = value;
+                };
+                Configuration.Engine.OnNewJsonPatch += (patch) =>
+                {
+                    var operations = JsonConvert.DeserializeObject<List<Operation<T>>>(patch);
+                    var patchDocumentOperations = new JsonPatchDocument<T>(operations);
+                    patchDocumentOperations.ApplyTo(state);
+                };
+            }
         }
-        public static StreamDataClient WithDefaultConfiguration() => WithConfiguration(c => { });
+        public static StreamDataClient<T> WithDefaultConfiguration() 
+            => WithConfiguration(c => { });
 
-        public static StreamDataClient WithConfiguration(Action<StreamDataConfiguration> configure)
+        public static StreamDataClient<T> WithConfiguration(Action<StreamDataConfiguration> configure)
         {
             var configuration = StreamDataConfiguration.Default;
             configure(configuration);
             EnsureSecretKeyPresentInProductionMode(configuration);
-            return new StreamDataClient(configuration);
+            return new StreamDataClient<T>(configuration);
         }
 
         private static void EnsureSecretKeyPresentInProductionMode(StreamDataConfiguration configurationToVerify)
@@ -37,42 +55,27 @@ namespace StreamData.Client
         }
 
 
-        object state = null;
         public void OnData<T>(Action<T> action)
         {
-            Configuration.Engine?.OnNewJsonData?.Invoke(json =>
+            Configuration.Engine.OnNewJsonData += (data) =>
             {
-                T value = JsonConvert.DeserializeObject<T>(json);
+                T value = JsonConvert.DeserializeObject<T>(data);
                 action(value);
-                if (Configuration.KeepState)
-                {
-                    state = value;
-                }
-            });
+            };
         }
 
         public void OnPatch<T>(Action<JsonPatchDocument<T>> actionWithPatch) where T:class
         {
-            Configuration.Engine?.OnNewJsonPatch?.Invoke(json =>
+            Configuration.Engine.OnNewJsonPatch += (patch) =>
             {
-                var operations = JsonConvert.DeserializeObject<List<Operation<T>>>(json);
+                var operations = JsonConvert.DeserializeObject<List<Operation<T>>>(patch);
                 var patchDocumentOperations = new JsonPatchDocument<T>(operations);
-
                 actionWithPatch(patchDocumentOperations);
+            };
 
-                if (Configuration.KeepState)
-                {
-                    patchDocumentOperations.ApplyTo((T)state);
-                }
-            });
-            
         }
 
-        public T State<T>()
-        {
-            return (T)state;
-        }
-
+        
         public void Start(string apiUrl)
         {
             if (!Configuration.Engine.Start())

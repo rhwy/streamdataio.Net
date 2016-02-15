@@ -13,27 +13,27 @@ namespace StreamData.Client.Tests
 
     class FakeEngine : ServerSentEventEngine
     {
-        //[{"op":"replace","path":"/0/price","value":19},{"op":"replace","path":"/1/price","value":61},{"op":"replace","path":"/5/price","value":37},{"op":"replace","path":"/12/price","value":82}]
-
-        public void SendData<T>(T value) => jsonDataAction(JsonConvert.SerializeObject(value));
+        public void SendData<T>(T value)
+        {
+            string data = JsonConvert.SerializeObject(value);
+            OnNewJsonData?.Invoke(data);
+        } 
         public void SendPatch<T>(JsonPatchDocument<T> doc) where T :class
         {
-            jsonPatchAction(JsonConvert.SerializeObject(doc));
+            string data = JsonConvert.SerializeObject(doc);
+            OnNewJsonPatch?.Invoke(data);
         }
 
         private bool isStarted = false;
         public bool IsStarted => isStarted;
-        private Action<string> jsonDataAction = (_)=> {};
-        private Action<string> jsonPatchAction = (_) => { };
-        public void OnNewJsonData2(Action<string> jsonAction) => this.jsonDataAction = jsonAction;
-        public void OnNewJsonPatch2(Action<string> jsonAction) => this.jsonPatchAction = jsonAction;
-        public Action<Action<string>> OnNewJsonData { get; }
-        public Action<Action<string>> OnNewJsonPatch { get; }
+
+        public event Action<string>  OnNewJsonData;
+        public event Action<string> OnNewJsonPatch;
 
         public FakeEngine()
         {
-            OnNewJsonData = jsonAction => this.jsonDataAction = jsonAction;
-            OnNewJsonPatch = jsonAction => this.jsonPatchAction = jsonAction;
+            OnNewJsonData += (_) => { };
+            OnNewJsonPatch += (_) => { };
         }
         public bool Start()
         {
@@ -50,7 +50,7 @@ namespace StreamData.Client.Tests
         WHEN_client_starts_THEN_it_should_order_engine_to_start()
         {
             FakeEngine fakeEngine = new FakeEngine();
-            var client = StreamDataClient.WithConfiguration(conf =>
+            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UseServerSentEventEngine(fakeEngine);
@@ -65,7 +65,7 @@ namespace StreamData.Client.Tests
         WHEN_client_recieves_data_THEN_it_should_call_ondata()
         {
             FakeEngine fakeEngine = new FakeEngine();
-            var client = StreamDataClient.WithConfiguration(conf =>
+            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UseServerSentEventEngine(fakeEngine);
@@ -91,7 +91,7 @@ namespace StreamData.Client.Tests
         WHEN_client_recieves_patch_THEN_it_should_call_onpatch_and_updateddata()
         {
             FakeEngine fakeEngine = new FakeEngine();
-            var client = StreamDataClient.WithConfiguration(conf =>
+            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UseServerSentEventEngine(fakeEngine);
@@ -120,13 +120,12 @@ namespace StreamData.Client.Tests
        WHEN_engine_receives_data_without_ondata_configured_THEN_it_should_not_throw_exception()
         {
             FakeEngine fakeEngine = new FakeEngine();
-            var client = StreamDataClient.WithConfiguration(conf =>
+            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UseServerSentEventEngine(fakeEngine);
             });
 
-            StockMarketOrders testData = null;
             StockMarketOrders expectedMarketOrders = new StockMarketOrders();
             expectedMarketOrders.Add(new Order() { Price = 10, Title = "test1" });
             expectedMarketOrders.Add(new Order() { Price = 20, Title = "test2" });
@@ -143,7 +142,7 @@ namespace StreamData.Client.Tests
         WHEN_client_has_no_data_THEN_state_is_default_and_dont_throw_exception()
         {
             FakeEngine fakeEngine = new FakeEngine();
-            var client = StreamDataClient.WithConfiguration(conf =>
+            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UseServerSentEventEngine(fakeEngine);
@@ -151,7 +150,7 @@ namespace StreamData.Client.Tests
 
             client.Start("fakeurl");
             StockMarketOrders actualState = null;
-            Check.ThatCode(() => actualState = client.State<StockMarketOrders>())
+            Check.ThatCode(() => actualState = client.State)
                 .DoesNotThrow();
 
             Check.That(actualState).IsEqualTo(default(StockMarketOrders));
@@ -163,7 +162,7 @@ namespace StreamData.Client.Tests
         WHEN_client_has_data_and_patch_THEN_state_is_updated()
         {
             FakeEngine fakeEngine = new FakeEngine();
-            var client = StreamDataClient.WithConfiguration(conf =>
+            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UseServerSentEventEngine(fakeEngine);
@@ -182,7 +181,7 @@ namespace StreamData.Client.Tests
                 new Operation<StockMarketOrders>("replace","0/price","0/price",20)
             });
             fakeEngine.SendPatch(patch);
-            StockMarketOrders actualState = client.State<StockMarketOrders>();
+            StockMarketOrders actualState = client.State;
             Check.That(actualState).IsNotNull();
             Check.That(actualState.GetTotal()).IsEqualTo(40);
         }

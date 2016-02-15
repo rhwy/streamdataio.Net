@@ -4,8 +4,10 @@
 
     public interface ServerSentEventEngine
     {
-        Action<Action<string>> OnNewJsonData { get; }
-        Action<Action<string>> OnNewJsonPatch { get; }
+        event Action<string> OnNewJsonData;
+        event Action<string> OnNewJsonPatch;
+        //Action<Action<string>> OnNewJsonData { get; }
+        //Action<Action<string>> OnNewJsonPatch { get; }
         bool Start();
     }
 }

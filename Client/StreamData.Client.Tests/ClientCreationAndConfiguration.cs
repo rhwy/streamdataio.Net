@@ -1,4 +1,6 @@
-﻿namespace StreamData.Client.Tests
+﻿using StreamData.Client.Tests.Data;
+
+namespace StreamData.Client.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -9,6 +11,7 @@
     using NFluent;
     using Xunit;
 
+    public class FakeObject { }
     public class ClientCreationAndConfiguration
     {
         [Fact]
@@ -22,7 +25,7 @@
         public void
         WHEN_I_want_to_create_new_instance_THEN_i_must_use_configuration_helper()
         {
-            var client = StreamDataClient.WithConfiguration(conf =>
+            var client = StreamDataClient<FakeObject>.WithConfiguration(conf =>
             {
                 conf.ApiUrl = "http://fakeurl";
                 conf.UseSandbox();
@@ -36,7 +39,7 @@
         WHEN_I_want_to_create_new_default_instance_THEN_it_should_be_configured_in_production()
         {
             ConfigurationManager.AppSettings["streamdata:secretkey"] = "abc";
-            var client = StreamDataClient.WithDefaultConfiguration();
+            var client = StreamDataClient<FakeObject>.WithDefaultConfiguration();
             Check.That(client.Configuration.Mode).IsEqualTo(StreamDataConfigurationMode.PRODUCTION);
         }
 
@@ -49,7 +52,7 @@
             ConfigurationManager.AppSettings["streamdata:secretkey"] = null;
             Check.ThatCode(() =>
             {
-                var client = StreamDataClient.WithConfiguration(conf =>
+                var client = StreamDataClient<FakeObject>.WithConfiguration(conf =>
                 {
                     conf.UseProduction();
                 });
@@ -63,7 +66,7 @@
         {
             Check.ThatCode(() =>
             {
-                var client = StreamDataClient.WithConfiguration(conf =>
+                var client = StreamDataClient<FakeObject>.WithConfiguration(conf =>
                 {
                     conf.UseSandbox();
                 });

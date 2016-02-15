@@ -37,10 +37,10 @@ namespace StreamData.Client.Tests
             var expectedUrl = $"{StreamDataOfficialUrls.PRODUCTION}/{testApiUrl}?X-Sd-Token={client.Configuration.SecretKey}";
             Check.That(client.ListenUrl).IsEqualTo(expectedUrl);
             //we wait 10s, after this time, we should already
-            //have some first data and some updates
+            //have some first data and at least, one update
             Thread.Sleep(10*1000);
             Check.That(orders).IsNotNull();
-            Check.That(counter).IsGreaterThan(1);
+            Check.That(counter).IsGreaterThan(0);
         }
     }
 }

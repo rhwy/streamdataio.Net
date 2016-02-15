@@ -82,10 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientCreationAndConfiguration.cs" />
+    <Compile Include="ClientEndToEndTest.cs" />
     <Compile Include="Data\Order.cs" />
     <Compile Include="Data\StockMarketOrders.cs" />
     <Compile Include="Data\TestData.cs" />
     <Compile Include="EnsureJsonPatchWorksWithTheModel.cs" />
+    <Compile Include="Data\FakeEngine.cs" />
+    <Compile Include="Data\FakeEngineWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientOnEventsTests.cs" />
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

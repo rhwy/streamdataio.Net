@@ -1,14 +1,10 @@
-﻿using Marvin.JsonPatch;
-using Marvin.JsonPatch.Operations;
-
-namespace StreamData.Client
+﻿namespace StreamData.Client
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Newtonsoft.Json;
+    using Marvin.JsonPatch;
+    using Marvin.JsonPatch.Operations;
 
 
     public class StreamDataClient<T> where T : class
@@ -31,12 +27,14 @@ namespace StreamData.Client
                 {
                     T value = JsonConvert.DeserializeObject<T>(data);
                     state = value;
+                    OnUpdatedState(state);
                 };
                 engine.OnNewJsonPatch += (patch) =>
                 {
                     var operations = JsonConvert.DeserializeObject<List<Operation<T>>>(patch);
                     var patchDocumentOperations = new JsonPatchDocument<T>(operations);
                     patchDocumentOperations.ApplyTo(state);
+                    OnUpdatedState(state);
                 };
             }
 
@@ -77,9 +75,9 @@ namespace StreamData.Client
                 var patchDocumentOperations = new JsonPatchDocument<T>(operations);
                 actionWithPatch(patchDocumentOperations);
             };
-
         }
 
+        public event Action<T> OnUpdatedState = s => { };
         
         public void Start(string apiUrl=null)
         {
@@ -91,5 +89,10 @@ namespace StreamData.Client
             }
         }
 
+        public void Stop()
+        {
+            if(engine != null && !engine.Stop())
+                throw new StreamDataConfigurationException("there was a problem while stopping engine");
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace StreamData.Client.Tests.Data
         {
             return FakeEngineWrapper.Instance.Start(apiUrl);
         }
-
+        public bool Stop() => FakeEngineWrapper.Instance.Stop();
         public string Url => FakeEngineWrapper.Instance.Url;
         public FakeEngine()
         {

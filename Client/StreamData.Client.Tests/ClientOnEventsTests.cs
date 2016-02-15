@@ -148,17 +148,50 @@ namespace StreamData.Client.Tests
             StockMarketOrders expectedMarketOrders = new StockMarketOrders();
             expectedMarketOrders.Add(new Order() { Price = 10, Title = "test1" });
             expectedMarketOrders.Add(new Order() { Price = 20, Title = "test2" });
+            StockMarketOrders actualState=null;
 
             client.Start("fakeurl");
+            client.OnUpdatedState += state => actualState = state;
             FakeEngineWrapper.Instance.SendData(expectedMarketOrders);
             var patch = new JsonPatchDocument<StockMarketOrders>(new List<Operation<StockMarketOrders>>
             {
                 new Operation<StockMarketOrders>("replace","0/price","0/price",20)
             });
             FakeEngineWrapper.Instance.SendPatch(patch);
-            StockMarketOrders actualState = client.State;
             Check.That(actualState).IsNotNull();
             Check.That(actualState.GetTotal()).IsEqualTo(40);
+        }
+
+        [Fact]
+        public void
+        WHEN_client_is_stopped_THEN_ensure_engine_is_stopped_before_destruction()
+        {
+            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+            {
+                conf.UseSandbox();
+                conf.UserServerSentEventEngine<FakeEngine>();
+            });
+
+            client.Start("fakeurl");
+            Check.ThatCode(() => client.Stop()).DoesNotThrow();
+
+            Check.That(FakeEngineWrapper.Instance.IsStarted).IsFalse();
+        }
+
+        [Fact]
+        public void
+        WHEN_I_stop_client_THEN_ensure_engine_does_not_throw()
+        {
+            Check.ThatCode(() =>
+            {
+                var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+                {
+                    conf.UseSandbox();
+                    conf.UserServerSentEventEngine<FakeEngine>();
+                });
+                client.Stop();
+
+            }).DoesNotThrow();
         }
     }
 }

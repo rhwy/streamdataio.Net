@@ -96,6 +96,7 @@ namespace StreamData.Client.Tests
             Check.That(client.ListenUrl).IsEqualTo(expected);
         }
 
+        
 
     }
 }

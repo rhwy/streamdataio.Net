@@ -40,5 +40,11 @@ namespace StreamData.Client.Tests.Data
             return true;
         }
 
+        public bool Stop()
+        {
+            isStarted = false;
+            this.url = null;
+            return true;
+        }
     }
 }

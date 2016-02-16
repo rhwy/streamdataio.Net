@@ -14,12 +14,12 @@ namespace DnxClientDemo
             if(args.Length<1) throw new Exception("please start app with 1 or 2 as argument");
             
             var stockMarketApiTestUrl = "http://stockmarket.streamdata.io/prices";
-            var secretKey = "M2NmYjMyNzItZDIyNS00Y2E1LTk2MDEtOGYzMGViMjgxY2Q5";
+            var secretKey = "fill-your-secret-key-here-to-use-in-production";
             
             if(args[0]=="1")
                ShowMeHowToKeepAnUpdatedState(stockMarketApiTestUrl,secretKey);
             if(args[0]=="2")
-                ShowMeHowToGetDataAndPatches(stockMarketApiTestUrl,secretKey);
+                ShowMeHowToGetDataAndPatches(stockMarketApiTestUrl);
         }
         
         
@@ -32,8 +32,6 @@ namespace DnxClientDemo
                     conf.SecretKey = secretKey;
                     conf.KeepStateUpdated();
                 });
-            
-            
             int consoleWidth=48;
             int counter = 0;
             
@@ -57,13 +55,11 @@ namespace DnxClientDemo
         }
         
         public static void ShowMeHowToGetDataAndPatches(
-            string stockMarketApiTestUrl,
-            string secretKey)
+            string stockMarketApiTestUrl)
         {
             var client = StreamDataClient<StockMarketOrders>
                 .WithConfiguration(conf=>{
-                    conf.SecretKey = secretKey;
-                    conf.KeepStateUpdated();
+                    conf.UseSandbox();
                 });
             
             int consoleWidth=48;

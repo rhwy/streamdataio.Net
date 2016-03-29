@@ -7,8 +7,8 @@
     <ProjectGuid>{ABF564AE-645B-4775-AEA0-78AFB864FFFC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StreamData.Client</RootNamespace>
-    <AssemblyName>StreamData.Client</AssemblyName>
+    <RootNamespace>Streamdata.Client</RootNamespace>
+    <AssemblyName>Streamdata.Client</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -61,11 +61,11 @@
     <Compile Include="EventSourceServerSentEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerSentEventEngine.cs" />
-    <Compile Include="StreamDataClient.cs" />
-    <Compile Include="StreamDataConfiguration.cs" />
-    <Compile Include="StreamDataConfigurationException.cs" />
-    <Compile Include="StreamDataConfigurationMode.cs" />
-    <Compile Include="StreamDataOfficialUrls.cs" />
+    <Compile Include="StreamdataClient.cs" />
+    <Compile Include="StreamdataConfiguration.cs" />
+    <Compile Include="StreamdataConfigurationException.cs" />
+    <Compile Include="StreamdataConfigurationMode.cs" />
+    <Compile Include="StreamdataOfficialUrls.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

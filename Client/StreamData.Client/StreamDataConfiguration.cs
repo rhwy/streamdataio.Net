@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Configuration;
 
-namespace StreamData.Client
+namespace Streamdata.Client
 {
-    using System.Configuration;
-
-
-    public class StreamDataConfiguration
+    public class StreamdataConfiguration
     {
         public string ApiUrl { get; set; }
         public string SecretKey { get; set; }
@@ -16,32 +14,32 @@ namespace StreamData.Client
         public bool KeepState => keepState;
         private string streamDataHost;
         public string StreamDataHost => streamDataHost;
-        private StreamDataConfigurationMode mode = StreamDataConfigurationMode.PRODUCTION;
-        public StreamDataConfigurationMode Mode => mode;
+        private StreamdataConfigurationMode mode = StreamdataConfigurationMode.PRODUCTION;
+        public StreamdataConfigurationMode Mode => mode;
         public Tuple<Type, object[]> EngineType => engineType;
 
-        public static StreamDataConfiguration Default
-            => new StreamDataConfiguration()
+        public static StreamdataConfiguration Default
+            => new StreamdataConfiguration()
             {
                 ApiUrl = ConfigurationManager.AppSettings["streamdata:apiurl"],
                 SecretKey = ConfigurationManager.AppSettings["streamdata:secretkey"]
             };
 
-        public StreamDataConfiguration()
+        public StreamdataConfiguration()
         {
             UseProduction();
         }
 
         public void UseSandbox()
         {
-            mode = StreamDataConfigurationMode.SANDBOX;
-            streamDataHost = StreamDataOfficialUrls.SANDBOX;
+            mode = StreamdataConfigurationMode.SANDBOX;
+            streamDataHost = StreamdataOfficialUrls.SANDBOX;
         }
 
         public void UseProduction()
         {
-            mode = StreamDataConfigurationMode.PRODUCTION;
-            streamDataHost = StreamDataOfficialUrls.PRODUCTION;
+            mode = StreamdataConfigurationMode.PRODUCTION;
+            streamDataHost = StreamdataOfficialUrls.PRODUCTION;
         }
 
         public void UserServerSentEventEngine<T>(params object[] constructorArgs) where T:ServerSentEventEngine

@@ -1,16 +1,10 @@
-﻿using StreamData.Client.Tests.Data;
+﻿using System.Configuration;
+using NFluent;
+using Streamdata.Client.Tests.Data;
+using Xunit;
 
-namespace StreamData.Client.Tests
+namespace Streamdata.Client.Tests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using NFluent;
-    using Xunit;
-
     public class FakeObject { }
     public class ClientCreationAndConfiguration
     {
@@ -25,7 +19,7 @@ namespace StreamData.Client.Tests
         public void
         WHEN_I_want_to_create_new_instance_THEN_i_must_use_configuration_helper()
         {
-            var client = StreamDataClient<FakeObject>.WithConfiguration(conf =>
+            var client = StreamdataClient<FakeObject>.WithConfiguration(conf =>
             {
                 conf.ApiUrl = "http://fakeurl";
                 conf.UseSandbox();
@@ -39,8 +33,8 @@ namespace StreamData.Client.Tests
         WHEN_I_want_to_create_new_default_instance_THEN_it_should_be_configured_in_production()
         {
             ConfigurationManager.AppSettings["streamdata:secretkey"] = "abc";
-            var client = StreamDataClient<FakeObject>.WithDefaultConfiguration();
-            Check.That(client.Configuration.Mode).IsEqualTo(StreamDataConfigurationMode.PRODUCTION);
+            var client = StreamdataClient<FakeObject>.WithDefaultConfiguration();
+            Check.That(client.Configuration.Mode).IsEqualTo(StreamdataConfigurationMode.PRODUCTION);
         }
 
 
@@ -52,11 +46,11 @@ namespace StreamData.Client.Tests
             ConfigurationManager.AppSettings["streamdata:secretkey"] = null;
             Check.ThatCode(() =>
             {
-                var client = StreamDataClient<FakeObject>.WithConfiguration(conf =>
+                var client = StreamdataClient<FakeObject>.WithConfiguration(conf =>
                 {
                     conf.UseProduction();
                 });
-            }).Throws<StreamDataConfigurationException>()
+            }).Throws<StreamdataConfigurationException>()
                 .WithMessage("[SecretKey] not configured");
         }
 
@@ -66,7 +60,7 @@ namespace StreamData.Client.Tests
         {
             Check.ThatCode(() =>
             {
-                var client = StreamDataClient<FakeObject>.WithConfiguration(conf =>
+                var client = StreamdataClient<FakeObject>.WithConfiguration(conf =>
                 {
                     conf.UseSandbox();
                 });
@@ -78,7 +72,7 @@ namespace StreamData.Client.Tests
         WHEN_I_create_new_instance_THEN_ensure_default_engine_is_defined()
         {
             ConfigurationManager.AppSettings["streamdata:secretkey"] = "abc";
-            var client = StreamDataClient<FakeObject>.WithDefaultConfiguration();
+            var client = StreamdataClient<FakeObject>.WithDefaultConfiguration();
             var type = client.Configuration.EngineType.Item1;
             Check.That(type).IsEqualTo(typeof (EventSourceServerSentEngine));
         }
@@ -88,10 +82,10 @@ namespace StreamData.Client.Tests
         WHEN_configuration_is_used_THEN_ensure_it_can_build_the_right_url()
         {
             ConfigurationManager.AppSettings["streamdata:secretkey"] = "abc";
-            var client = StreamDataClient<FakeObject>.WithConfiguration(
+            var client = StreamdataClient<FakeObject>.WithConfiguration(
                 conf=>conf.UserServerSentEventEngine<FakeEngine>());
             string url = client.Configuration.BuildUrl("fakeurl");
-            string expected = $"{StreamDataOfficialUrls.PRODUCTION}/fakeurl?X-Sd-Token=abc";
+            string expected = $"{StreamdataOfficialUrls.PRODUCTION}/fakeurl?X-Sd-Token=abc";
             client.Start("fakeurl");
             Check.That(client.ListenUrl).IsEqualTo(expected);
         }

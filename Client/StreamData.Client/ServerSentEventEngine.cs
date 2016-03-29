@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-using Marvin.JsonPatch;
-using Newtonsoft.Json;
+﻿using System;
 
-namespace StreamData.Client
+namespace Streamdata.Client
 {
-    using System;
-
-
     public interface ServerSentEventEngine
     {
         event Action<string> OnNewJsonData;

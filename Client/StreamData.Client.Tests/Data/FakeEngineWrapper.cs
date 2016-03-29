@@ -2,7 +2,7 @@ using System;
 using Marvin.JsonPatch;
 using Newtonsoft.Json;
 
-namespace StreamData.Client.Tests.Data
+namespace Streamdata.Client.Tests.Data
 {
     class FakeEngineWrapper : ServerSentEventEngine
     {

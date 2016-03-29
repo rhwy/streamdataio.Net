@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>StreamData.Client</id>
-    <version>1.1.0.0</version>
-    <title>StreamData.io Client</title>
+    <id>Streamdata.Client</id>
+    <version>1.2.1.0</version>
+    <title>Streamdataio.Net Client</title>
     <authors>Rui Carvalho and contributors</authors>
     <owners>Rui Carvalho</owners>
-    <licenseUrl>https://github.com/rhwy/StreamData.Net/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/rhwy/StreamData.Net/</projectUrl>
+    <licenseUrl>https://github.com/rhwy/Streamdataio.Net/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/rhwy/Streamdataio.Net/</projectUrl>
     <iconUrl>https://portal.streamdata.io/assets/admin/layout/img/logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>StreamData.io official client</description>
+    <description>Streamdata.io official client</description>
     <releaseNotes>initial version</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>SSE streaming html5 http Events jsonpatch json</tags>
     <dependencies>
       <dependency id="EventSource4Net" version="0.4.0.0" />
       <dependency id="Marvin.JsonPatch" version="0.9.0"/>
-      <dependency id="Newtonsoft.Json" version="6.0.4" />
+      <dependency id="Newtonsoft.Json" version="8.0.3" />
       <dependency id="slf4net" version="0.1.32.1" />
     </dependencies> 
   </metadata>
   <files>
-    <file src="bin/Release/StreamData.Client.dll" target="lib" />
+    <file src="bin/Release/Streamdata.Client.dll" target="lib" />
   </files>
 </package>

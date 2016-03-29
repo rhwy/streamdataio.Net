@@ -3,9 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamData.Client", "StreamData.Client\StreamData.Client.csproj", "{ABF564AE-645B-4775-AEA0-78AFB864FFFC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streamdata.Client", "Streamdata.Client\Streamdata.Client.csproj", "{ABF564AE-645B-4775-AEA0-78AFB864FFFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamData.Client.Tests", "StreamData.Client.Tests\StreamData.Client.Tests.csproj", "{90364CD6-95C0-4E22-8935-3C27B51948EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streamdata.Client.Tests", "Streamdata.Client.Tests\Streamdata.Client.Tests.csproj", "{90364CD6-95C0-4E22-8935-3C27B51948EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{684D4CC8-C65E-4742-AF78-5A6C245BA419}"
+	ProjectSection(SolutionItems) = preProject
+		build.sh = build.sh
+		packages.config = packages.config
+		Streamdata.Client\Streamdata.Client.nuspec = Streamdata.Client\Streamdata.Client.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,22 +1,19 @@
 ﻿using System.Collections.Generic;
+using Marvin.JsonPatch;
 using Marvin.JsonPatch.Operations;
+using NFluent;
+using Streamdata.Client.Tests.Data;
+using Xunit;
 
-namespace StreamData.Client.Tests
+namespace Streamdata.Client.Tests
 {
-    using NFluent;
-    using StreamData.Client;
-    using StreamData.Client.Tests.Data;
-    using Xunit;
-    using Marvin.JsonPatch;
-
-
     public class ClientOnEventsTests
     {
         [Fact]
         public void
         WHEN_client_starts_THEN_it_should_order_engine_to_start()
         {
-            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+            var client = StreamdataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UserServerSentEventEngine<FakeEngine>();
@@ -30,7 +27,7 @@ namespace StreamData.Client.Tests
         public void
         WHEN_client_starts_THEN_engine_apiurl_should_be_set()
         {
-            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+            var client = StreamdataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UserServerSentEventEngine<FakeEngine>();
@@ -44,7 +41,7 @@ namespace StreamData.Client.Tests
         public void
         WHEN_client_recieves_data_THEN_it_should_call_ondata()
         {
-            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+            var client = StreamdataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UserServerSentEventEngine<FakeEngine>();
@@ -69,7 +66,7 @@ namespace StreamData.Client.Tests
         public void
         WHEN_client_recieves_patch_THEN_it_should_call_onpatch_and_updateddata()
         {
-            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+            var client = StreamdataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UserServerSentEventEngine<FakeEngine>();
@@ -99,7 +96,7 @@ namespace StreamData.Client.Tests
         public void
        WHEN_engine_receives_data_without_ondata_configured_THEN_it_should_not_throw_exception()
         {
-            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+            var client = StreamdataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UserServerSentEventEngine<FakeEngine>();
@@ -120,7 +117,7 @@ namespace StreamData.Client.Tests
         public void
         WHEN_client_has_no_data_THEN_state_is_default_and_dont_throw_exception()
         {
-            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+            var client = StreamdataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UserServerSentEventEngine<FakeEngine>();
@@ -139,7 +136,7 @@ namespace StreamData.Client.Tests
         public void
         WHEN_client_has_data_and_patch_THEN_state_is_updated()
         {
-            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+            var client = StreamdataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UserServerSentEventEngine<FakeEngine>();
@@ -166,7 +163,7 @@ namespace StreamData.Client.Tests
         public void
         WHEN_client_is_stopped_THEN_ensure_engine_is_stopped_before_destruction()
         {
-            var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+            var client = StreamdataClient<StockMarketOrders>.WithConfiguration(conf =>
             {
                 conf.UseSandbox();
                 conf.UserServerSentEventEngine<FakeEngine>();
@@ -184,7 +181,7 @@ namespace StreamData.Client.Tests
         {
             Check.ThatCode(() =>
             {
-                var client = StreamDataClient<StockMarketOrders>.WithConfiguration(conf =>
+                var client = StreamdataClient<StockMarketOrders>.WithConfiguration(conf =>
                 {
                     conf.UseSandbox();
                     conf.UserServerSentEventEngine<FakeEngine>();

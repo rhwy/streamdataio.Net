@@ -1,20 +1,19 @@
-﻿namespace StreamData.Client
+﻿using System;
+using System.Collections.Generic;
+using Marvin.JsonPatch;
+using Marvin.JsonPatch.Operations;
+using Newtonsoft.Json;
+
+namespace Streamdata.Client
 {
-    using System;
-    using System.Collections.Generic;
-    using Newtonsoft.Json;
-    using Marvin.JsonPatch;
-    using Marvin.JsonPatch.Operations;
-
-
-    public class StreamDataClient<T> where T : class
+    public class StreamdataClient<T> where T : class
     {
-        public StreamDataConfiguration Configuration { get; }
+        public StreamdataConfiguration Configuration { get; }
         T state = default(T);
         public T State => state;
         private ServerSentEventEngine engine;
         public string ListenUrl => engine.Url;
-        private StreamDataClient(StreamDataConfiguration config)
+        private StreamdataClient(StreamdataConfiguration config)
         {
             Configuration = config;
             engine = Activator.CreateInstance(
@@ -39,22 +38,22 @@
             }
 
         }
-        public static StreamDataClient<T> WithDefaultConfiguration() 
+        public static StreamdataClient<T> WithDefaultConfiguration() 
             => WithConfiguration(c => { });
 
-        public static StreamDataClient<T> WithConfiguration(Action<StreamDataConfiguration> configure)
+        public static StreamdataClient<T> WithConfiguration(Action<StreamdataConfiguration> configure)
         {
-            var configuration = StreamDataConfiguration.Default;
+            var configuration = StreamdataConfiguration.Default;
             configure(configuration);
             EnsureSecretKeyPresentInProductionMode(configuration);
-            return new StreamDataClient<T>(configuration);
+            return new StreamdataClient<T>(configuration);
         }
 
-        private static void EnsureSecretKeyPresentInProductionMode(StreamDataConfiguration configurationToVerify)
+        private static void EnsureSecretKeyPresentInProductionMode(StreamdataConfiguration configurationToVerify)
         {
-            if (configurationToVerify.Mode == StreamDataConfigurationMode.PRODUCTION
+            if (configurationToVerify.Mode == StreamdataConfigurationMode.PRODUCTION
                  && string.IsNullOrEmpty(configurationToVerify.SecretKey))
-                throw new StreamDataConfigurationException("[SecretKey] not configured");
+                throw new StreamdataConfigurationException("[SecretKey] not configured");
         }
 
 
@@ -85,14 +84,14 @@
             var url = Configuration.BuildUrl(Configuration.ApiUrl);
             if (!engine.Start(url))
             {
-                throw new StreamDataConfigurationException("ServerSentEvents engine can not be started");
+                throw new StreamdataConfigurationException("ServerSentEvents engine can not be started");
             }
         }
 
         public void Stop()
         {
             if(engine != null && !engine.Stop())
-                throw new StreamDataConfigurationException("there was a problem while stopping engine");
+                throw new StreamdataConfigurationException("there was a problem while stopping engine");
         }
     }
 }

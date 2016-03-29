@@ -4,7 +4,7 @@ using EventSource4Net;
 using slf4net;
 using slf4net.Resolvers;
 
-namespace StreamData.Client
+namespace Streamdata.Client
 {
     public class EventSourceServerSentEngine : ServerSentEventEngine
     {

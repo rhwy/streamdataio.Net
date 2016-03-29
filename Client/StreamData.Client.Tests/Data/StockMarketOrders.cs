@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StreamData.Client.Tests.Data
+namespace Streamdata.Client.Tests.Data
 {
     public class StockMarketOrders : List<Order>
     {

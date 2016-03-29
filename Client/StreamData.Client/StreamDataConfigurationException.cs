@@ -1,10 +1,10 @@
-﻿namespace StreamData.Client
-{
-    using System;
+﻿using System;
 
-    public class StreamDataConfigurationException : Exception
+namespace Streamdata.Client
+{
+    public class StreamdataConfigurationException : Exception
     {
-        public StreamDataConfigurationException(string message = null) : base(message)
+        public StreamdataConfigurationException(string message = null) : base(message)
         {
 
         }

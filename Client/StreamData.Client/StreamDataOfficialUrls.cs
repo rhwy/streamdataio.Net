@@ -1,6 +1,6 @@
-﻿namespace StreamData.Client
+﻿namespace Streamdata.Client
 {
-    public static class StreamDataOfficialUrls
+    public static class StreamdataOfficialUrls
     {
         public static readonly string SANDBOX = "https://proxy.streamdata.io";
         public static readonly string PRODUCTION = "https://streamdata.motwin.net";

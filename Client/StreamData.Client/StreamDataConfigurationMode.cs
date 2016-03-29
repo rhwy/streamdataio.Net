@@ -1,6 +1,6 @@
-﻿namespace StreamData.Client
+﻿namespace Streamdata.Client
 {
-    public enum StreamDataConfigurationMode
+    public enum StreamdataConfigurationMode
     {
         PRODUCTION = 1,
         SANDBOX = 2

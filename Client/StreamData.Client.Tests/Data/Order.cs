@@ -1,4 +1,4 @@
-namespace StreamData.Client.Tests.Data
+namespace Streamdata.Client.Tests.Data
 {
     public class Order
     {

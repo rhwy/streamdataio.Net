@@ -7,8 +7,8 @@
     <ProjectGuid>{E348065A-16D7-41D2-93F8-D1CA9665D8DD}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StreamData.StockMarket.Demo</RootNamespace>
-    <AssemblyName>StreamData.StockMarket.Demo</AssemblyName>
+    <RootNamespace>Streamdata.StockMarket.Demo</RootNamespace>
+    <AssemblyName>Streamdata.StockMarket.Demo</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -50,8 +50,8 @@
       <HintPath>packages\slf4net.0.1.32.1\lib\net35\slf4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StreamData.Client, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\StreamData.Client.1.1.0.0\lib\StreamData.Client.dll</HintPath>
+    <Reference Include="Streamdata.Client, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Streamdata.Client.1.1.0.0\lib\StreamData.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

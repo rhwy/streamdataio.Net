@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Marvin.JsonPatch;
 using Marvin.JsonPatch.Operations;
-using NFluent;
-using StreamData.Client.Tests.Data;
-using Xunit;
 using Newtonsoft.Json;
-using System.Linq;
+using NFluent;
+using Streamdata.Client.Tests.Data;
+using Xunit;
 
-namespace StreamData.Client.Tests
+namespace Streamdata.Client.Tests
 {
     public class EnsureJsonPatchWorksWithTheModel
     {

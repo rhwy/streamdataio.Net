@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using StreamData.Client;
+    using Streamdata.Client;
     using Newtonsoft.Json;
 
     public class Program
@@ -26,7 +26,7 @@
             string stockMarketApiTestUrl,
             string secretKey)
         {
-            var client = StreamDataClient<StockMarketOrders>
+            var client = StreamdataClient<StockMarketOrders>
                 .WithConfiguration(conf => {
                     conf.SecretKey = secretKey;
                     conf.KeepStateUpdated();
@@ -58,7 +58,7 @@
         public static void ShowMeHowToGetDataAndPatches(
             string stockMarketApiTestUrl)
         {
-            var client = StreamDataClient<StockMarketOrders>
+            var client = StreamdataClient<StockMarketOrders>
                 .WithConfiguration(conf => {
                     conf.UseSandbox();
                 });

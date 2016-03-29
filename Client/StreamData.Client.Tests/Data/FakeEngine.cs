@@ -1,6 +1,6 @@
 using System;
 
-namespace StreamData.Client.Tests.Data
+namespace Streamdata.Client.Tests.Data
 {
     class FakeEngine : ServerSentEventEngine
     {

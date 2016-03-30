@@ -19,7 +19,9 @@ The easiest way to use the service is to install the [Streamdata Client](https:/
 
     Install-Package Streamdata.Client
 
-## Let's start! Once installed, you can use the client which is the only thing you need to know in the API.
+## Let's start! 
+
+Once installed, you can use the client which is the only thing you need to know in the API.
 
 The client uses strong types in order to simplify other interactions with the API. It is also built with some conventions and with a fluent configuration API for ease of use and convenience.
 

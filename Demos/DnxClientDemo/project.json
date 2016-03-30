@@ -5,7 +5,7 @@
   },
 
   "dependencies": {
-    "Streamdata.Client": "1.2.0-*",
+    "Streamdata.Client": "1.2.1-*",
     "Marvin.JsonPatch":"0.9.0",
     "Newtonsoft.Json":"6.0.4"
   },

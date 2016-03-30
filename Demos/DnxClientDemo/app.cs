@@ -27,7 +27,7 @@ namespace DnxClientDemo
             string stockMarketApiTestUrl,
             string secretKey)
         {
-            var client = StreamDataClient<StockMarketOrders>
+            var client = StreamdataClient<StockMarketOrders>
                 .WithConfiguration(conf=>{
                     conf.SecretKey = secretKey;
                     conf.KeepStateUpdated();
@@ -57,7 +57,7 @@ namespace DnxClientDemo
         public static void ShowMeHowToGetDataAndPatches(
             string stockMarketApiTestUrl)
         {
-            var client = StreamDataClient<StockMarketOrders>
+            var client = StreamdataClient<StockMarketOrders>
                 .WithConfiguration(conf=>{
                     conf.UseSandbox();
                 });

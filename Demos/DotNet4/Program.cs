@@ -148,7 +148,7 @@
                 + new string('-', width - 1) + Environment.NewLine);
 
             Console.ForegroundColor = actualColor;
-            Console.WriteLine("Updated {0} times at {0}",counter,DateTime.Now);
+            Console.WriteLine("Updated {0} times at {1}",counter,DateTime.Now);
         }
 
     }
